@@ -276,6 +276,7 @@ NSString* message = nil;
     return newMessageExists;
 }
 
+/*
 - (BOOL) isTLCActive:(NSString*) data
 {
     if ([data rangeOfString:@"/etm/time/timesheet/etmTnsMonth.jsp"].location == NSNotFound)
@@ -285,6 +286,7 @@ NSString* message = nil;
     
     return TRUE;
 }
+ */
 
 - (NSMutableArray*) parseSchedule:(NSString*) data
 {
@@ -614,6 +616,7 @@ NSString* message = nil;
         return NO;
     }
     
+    /*
     if (![self isTLCActive:data])
     {
         [self updateProgress:@"MyTLC is currently undergoing maintenance, please try again later"];
@@ -621,11 +624,11 @@ NSString* message = nil;
         done = YES;
         
         return NO;
-    }
+    }*/
     
     [self updateProgress:@"Getting schedule"];
     
-    data = [self getData:@"https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp"];
+    data = [self getData:@"/etm/time/timesheet/etmTnsMonth.jsp"];
     
     if (!data)
     {

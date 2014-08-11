@@ -229,7 +229,7 @@ BOOL showNotifications = NO;
     
     if (version < 1)
     {
-        [defaults setValue:@"Work GSOS Shift" forKey:@"title"];
+        [defaults setValue:@"Work @ Best Buy" forKey:@"title"];
         
         [self displayAlert:@"Changelog:\n - Fixed Settings Icon\n - Changed Default Event Title"];
         
@@ -250,7 +250,7 @@ BOOL showNotifications = NO;
         
         [defaults setValue:@"12:00 AM" forKey:@"sync_time"];
         
-        [defaults setValue:@"Work GSOS Shift" forKey:@"title"];
+        [defaults setValue:@"Work @ Best Buy" forKey:@"title"];
         
         [defaults synchronize];
     } else {
