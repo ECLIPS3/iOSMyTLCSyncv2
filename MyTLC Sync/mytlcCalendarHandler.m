@@ -659,7 +659,7 @@ NSString* message = nil;
     
     NSDateComponents* dateComponents = [calendar components:(NSMonthCalendarUnit | NSDayCalendarUnit | NSYearCalendarUnit) fromDate:[NSDate date]];
     
-    NSString* month = [NSString stringWithFormat:@"%D", [dateComponents month] + 1];
+    NSString* month = [NSString stringWithFormat:@"%lD", [dateComponents month] + 1];
     
     NSString* year = [NSString stringWithFormat:@"%lD", (long) [dateComponents year]];
     
