@@ -41,9 +41,9 @@ BOOL showNotifications = NO;
 
 - (void) checkStatus
 {
-    while (![ch hasCompleted] || [aivStatus isAnimating])
+    while (![ch hasCompleted])
     {
-        if (![ch hasNewMessage] && ![ch hasCompleted]){
+        if (![ch hasNewMessage]){
             continue;
         }
         
@@ -74,7 +74,7 @@ BOOL showNotifications = NO;
 - (void) displayMessage
 {
     [lblStatus setText:[ch getMessage]];
-    
+
     if ([ch hasCompleted])
     {
         if (showNotifications)
@@ -229,9 +229,9 @@ BOOL showNotifications = NO;
     
     if (version < 1)
     {
-        [defaults setValue:@"Work@BestBuy" forKey:@"title"];
+        [defaults setValue:@"Work GSOS Shift" forKey:@"title"];
         
-        [self displayAlert:@"RC 1.3 Changelog:\n - Added custom event titles"];
+        [self displayAlert:@"Changelog:\n - Fixed Settings Icon\n - Changed Default Event Title"];
         
         [defaults setInteger:1 forKey:@"version"];
         
@@ -250,7 +250,7 @@ BOOL showNotifications = NO;
         
         [defaults setValue:@"12:00 AM" forKey:@"sync_time"];
         
-        [defaults setValue:@"Work@BestBuy" forKey:@"title"];
+        [defaults setValue:@"Work GSOS Shift" forKey:@"title"];
         
         [defaults synchronize];
     } else {

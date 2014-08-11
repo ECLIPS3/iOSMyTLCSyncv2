@@ -62,7 +62,7 @@ NSString* message = nil;
     
     NSDate* date = [NSDate date];
     
-    NSDateComponents* components = [cal components:(NSMonthCalendarUnit | NSYearCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit | NSSecondCalendarUnit) fromDate:date];
+    NSDateComponents* components = [cal components:(NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond) fromDate:date];
     
     [components setHour:0];
     
@@ -81,7 +81,7 @@ NSString* message = nil;
         return newShifts;
     }
     
-    for (long x = shifts.count - 1; x >= 0; x--)
+    for (unsigned long x = shifts.count - 1; x > 0; x--)
     {
         EKEvent* event = [eventStore eventWithIdentifier:shifts[x]];
         
@@ -166,7 +166,6 @@ NSString* message = nil;
         if (!err)
         {
             [saveShifts addObject:[event eventIdentifier]];
-            
             count++;
         }
 
@@ -226,19 +225,17 @@ NSString* message = nil;
 - (NSString*) getData:(NSString*) url
 {
     NSURL* urlRequest = [NSURL URLWithString:url];
-    
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[urlRequest standardizedURL] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10];
-    
+
     NSError* err = nil;
     
-    NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
-    
-    if (!err) {
-        return [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];;
+    NSString* result = [NSString stringWithContentsOfURL:urlRequest encoding:NSUTF8StringEncoding error:&err];
+
+    if (!err)
+    {
+        return result;
     }
     
     return nil;
-
 }
 
 - (NSString*) getMessage
@@ -279,47 +276,57 @@ NSString* message = nil;
     return newMessageExists;
 }
 
+- (BOOL) isTLCActive:(NSString*) data
+{
+    if ([data rangeOfString:@"/etm/time/timesheet/etmTnsMonth.jsp"].location == NSNotFound)
+    {
+        return FALSE;
+    }
+    
+    return TRUE;
+}
+
 - (NSMutableArray*) parseSchedule:(NSString*) data
 {
-    if ([[data lowercaseString] rangeOfString:@"calmonthtitle"].location == NSNotFound)
+    if ([data rangeOfString:@"calMonthTitle"].location == NSNotFound)
     {
         return nil;
     }
     
-    NSRange begin = [[data lowercaseString] rangeOfString:@"calmonthtitle"];
+    NSRange begin = [data rangeOfString:@"calMonthTitle"];
     
     NSString* sMonth = [data substringFromIndex:begin.location + 15];
     
-    NSRange end = [[sMonth lowercaseString] rangeOfString:@"</span>"];
+    NSRange end = [sMonth rangeOfString:@"</span>"];
     
     sMonth = [sMonth substringToIndex:end.location];
     
-    if ([[data lowercaseString] rangeOfString:@"calyeartitle"].location == NSNotFound)
+    if ([data rangeOfString:@"calYearTitle"].location == NSNotFound)
     {
         return nil;
     }
     
-    begin = [[data lowercaseString] rangeOfString:@"calyeartitle"];
+    begin = [data rangeOfString:@"calYearTitle"];
     
     NSString* sYear = [data substringFromIndex:begin.location + 14];
     
-    end = [[sYear lowercaseString] rangeOfString:@"</span>"];
+    end = [sYear rangeOfString:@"</span>"];
     
     sYear = [sYear substringToIndex:end.location];
     
-    if ([[data lowercaseString] rangeOfString:@"calweekdayheader"].location == NSNotFound)
+    if ([data rangeOfString:@"calWeekDayHeader"].location == NSNotFound)
     {
         return nil;
     }
     
-    data = [data substringFromIndex:[[data lowercaseString] rangeOfString:@"calweekdayheader"].location];
+    data = [data substringFromIndex:[data rangeOfString:@"calWeekDayHeader"].location];
     
-    if ([[data lowercaseString] rangeOfString:@"document.forms[0].new_month_year"].location == NSNotFound)
+    if ([data rangeOfString:@"document.forms[0].NEW_MONTH_YEAR"].location == NSNotFound)
     {
         return nil;
     }
     
-    data = [data substringToIndex:[[data lowercaseString] rangeOfString:@"document.forms[0].new_month_year"].location];
+    data = [data substringToIndex:[data rangeOfString:@"document.forms[0].NEW_MONTH_YEAR"].location];
     
     if (!data)
     {
@@ -338,25 +345,25 @@ NSString* message = nil;
 
     for (NSString* schedule in schedules)
     {
-        if ([[schedule lowercaseString] rangeOfString:@"off"].location != NSNotFound)
+        if ([schedule rangeOfString:@"OFF"].location != NSNotFound)
         {
             continue;
         }
         
-        if ([[schedule lowercaseString] rangeOfString:@"calendarcellregularcurrent"].location == NSNotFound && [[schedule lowercaseString] rangeOfString:@"calendarcellregularfuture"].location == NSNotFound)
+        if ([schedule rangeOfString:@"calendarCellRegularCurrent"].location == NSNotFound && [schedule rangeOfString:@"calendarCellRegularFuture"].location == NSNotFound)
         {
             continue;
         }
         
         NSString* date = nil;
         
-        if ([[schedule lowercaseString] rangeOfString:@"calendarcellregularcurrent"].location == NSNotFound)
+        if ([schedule rangeOfString:@"calendarCellRegularCurrent"].location == NSNotFound)
         {
-            begin = [[schedule lowercaseString] rangeOfString:@"calendardatenormal"];
+            begin = [schedule rangeOfString:@"calendarDateNormal"];
             
             date = [schedule substringFromIndex:begin.location + 22];
         } else {
-            begin = [[schedule lowercaseString] rangeOfString:@"calendardatecurrent"];
+            begin = [schedule rangeOfString:@"calendarDateCurrent"];
             
             date = [schedule substringFromIndex:begin.location + 23];
         }
@@ -366,7 +373,7 @@ NSString* message = nil;
             continue;
         }
         
-        end = [[date lowercaseString] rangeOfString:@"</span>"];
+        end = [date rangeOfString:@"</span>"];
         
         date = [date substringToIndex:end.location];
         
@@ -374,19 +381,19 @@ NSString* message = nil;
         
         date = [date stringByTrimmingCharactersInSet:replace];
         
-        NSArray* shifts = [[schedule lowercaseString] componentsSeparatedByString:@"<br>"];
+        NSArray* shifts = [schedule componentsSeparatedByString:@"<br>"];
         
         NSInteger offset = [self getOffsetSettings];
         
         for (int i = 0; i < [shifts count]; i++)
         {
-            if (([[shifts[i] lowercaseString] rangeOfString:@"am"].location != NSNotFound && [[shifts[i] lowercaseString] rangeOfString:@"<td>"].location == NSNotFound) || ([[shifts[i] lowercaseString] rangeOfString:@"pm"].location != NSNotFound && [[shifts[i] lowercaseString] rangeOfString:@"<td>"].location == NSNotFound))
+            if (([shifts[i] rangeOfString:@"AM"].location != NSNotFound && [shifts[i] rangeOfString:@"<td>"].location == NSNotFound) || ([shifts[i] rangeOfString:@"PM"].location != NSNotFound && [shifts[i] rangeOfString:@"<td>"].location == NSNotFound))
             {
                 NSString* dept = @"";
                 
                 if (i != shifts.count - 1)
                 {
-                    if ([[shifts[i + 1] lowercaseString] rangeOfString:@"l-"].location != NSNotFound)
+                    if ([shifts[i + 1] rangeOfString:@"L-"].location != NSNotFound)
                     {
                         dept = [shifts[i + 1] stringByTrimmingCharactersInSet:replace];
                     }
@@ -436,67 +443,62 @@ NSString* message = nil;
 
 - (NSString*) parseToken:(NSString*) data
 {
-    if ([[data lowercaseString]rangeOfString:@"end hotkey for submit"].location == NSNotFound)
+    if ([data rangeOfString:@"End Hotkey for submit"].location == NSNotFound)
     {
         return nil;
     }
     
-    NSRange end = [[data lowercaseString] rangeOfString:@"end hotkey for submit"];
+    NSRange end = [data rangeOfString:@"End Hotkey for submit"];
     
     data = [data substringFromIndex:end.location];
     
-    if (([[data lowercaseString] rangeOfString:@"hidden"].location == NSNotFound) || ([[data lowercaseString] rangeOfString:@"url_login_token"].location == NSNotFound))
+    if (([data rangeOfString:@"hidden"].location == NSNotFound) || ([data rangeOfString:@"url_login_token"].location == NSNotFound))
         {
             return nil;
         }
     
-    NSRange begin = [[data lowercaseString] rangeOfString:@"hidden"];
+    NSRange begin = [data rangeOfString:@"hidden"];
     
     data = [data substringFromIndex:begin.location + 14];
     
-    end = [[data lowercaseString] rangeOfString:@"url_login_token"];
+    end = [data rangeOfString:@"url_login_token"];
     
     data = [data substringToIndex:end.location - 7];
     
     return data;
 }
 
-- (NSString*) parseSecureToken:(NSString*) data
+- (NSString*) parseToken2:(NSString*) data
 {
-    if ([[data lowercaseString] rangeOfString:@"securetoken"].location != NSNotFound)
-    {
-        NSRange begin = [[data lowercaseString] rangeOfString:@"securetoken"];
-        
-        data = [data substringFromIndex:begin.location + 20];
-        
-        if ([data rangeOfString:@"'/>"].location == NSNotFound)
-        {
-            return nil;
-        }
-        
-        NSRange end = [data rangeOfString:@"'/>"];
-        
-        data = [data substringToIndex:end.location];
-        
-        return data;
-    } else if ([[data lowercaseString] rangeOfString:@"wbat"].location != NSNotFound)
-    {
-        data = [self parseWbat:data];
-        
-        return data;
-    }
-    
-    return nil;
-}
-
-- (NSString*) parseWbat:(NSString*) data
-{
-    if ([[data lowercaseString] rangeOfString:@"wbat"].location == NSNotFound)
+    if ([data rangeOfString:@"secureToken"].location == NSNotFound)
     {
         return nil;
     }
     
-    NSRange begin = [[data lowercaseString] rangeOfString:@"wbat"];
+    NSRange begin = [data rangeOfString:@"secureToken"];
+    
+    data = [data substringFromIndex:begin.location + 20];
+    
+    if ([data rangeOfString:@"'/>"].location == NSNotFound)
+    {
+        return nil;
+    }
+    
+    NSRange end = [data rangeOfString:@"'/>"];
+    
+    data = [data substringToIndex:end.location];
+    
+    return data;
+}
+
+- (NSString*) parseWbat:(NSString*) data
+{
+    if ([data rangeOfString:@"wbat"].location == NSNotFound)
+    {
+        return nil;
+    }
+    
+    NSRange begin = [data rangeOfString:@"wbat"];
     
     data = [data substringFromIndex:begin.location + 23];
     
@@ -516,7 +518,7 @@ NSString* message = nil;
 {
     NSURL* urlRequest = [NSURL URLWithString:url];
     
-    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[urlRequest standardizedURL] cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:10.0f];
+    NSMutableURLRequest* request = [NSMutableURLRequest requestWithURL:[urlRequest standardizedURL]];
     
     [request setHTTPMethod:@"POST"];
     
@@ -527,7 +529,7 @@ NSString* message = nil;
     NSError* err = nil;
     
     NSData* responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:&err];
-
+   
     if (!err) {
         return [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];;
     }
@@ -581,10 +583,6 @@ NSString* message = nil;
     
     wbat = [self parseWbat:data];
     
-    NSLog(@"loginToken: %@", loginToken);
-    NSLog(@"wbat: %@", wbat);
-    NSLog(@"Data:\n %@", data);
-    
     if (!loginToken)
     {
         [self updateProgress:@"Couldn't get login token, do you have a valid network connection?"];
@@ -607,9 +605,18 @@ NSString* message = nil;
     
     data = [self postData:@"https://mytlc.bestbuy.com/etm/login.jsp" params:params];
     
-    if ([[data lowercaseString] rangeOfString:@"etmmenu.jsp"].location == NSNotFound)
+    if ([data rangeOfString:@"etmMenu.jsp"].location == NSNotFound)
     {
         [self updateProgress:@"Incorrect username and password, please try again"];
+        
+        done = YES;
+        
+        return NO;
+    }
+    
+    if (![self isTLCActive:data])
+    {
+        [self updateProgress:@"MyTLC is currently undergoing maintenance, please try again later"];
         
         done = YES;
         
@@ -635,14 +642,9 @@ NSString* message = nil;
     
     [self updateProgress:@"Getting next security token"];
     
-    NSString* securityToken = [self parseSecureToken:data];
+    NSString* securityToken = [self parseToken2:data];
     
     wbat = [self parseWbat:data];
-    
-    NSLog(@"loginToken: %@", loginToken);
-    NSLog(@"securityToken: %@", securityToken);
-    NSLog(@"wbat: %@", wbat);
-    NSLog(@"Data:\n %@", data);
     
     if (!securityToken && !wbat)
     {
@@ -655,9 +657,9 @@ NSString* message = nil;
     
     [self updateProgress:@"Formatting shifts"];
     
-    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
     
-    NSDateComponents* dateComponents = [calendar components:(NSMonthCalendarUnit | NSDayCalendarUnit | NSYearCalendarUnit) fromDate:[NSDate date]];
+    NSDateComponents* dateComponents = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:[NSDate date]];
     
     NSString* month = [NSString stringWithFormat:@"%lD", [dateComponents month] + 1];
     
@@ -667,7 +669,7 @@ NSString* message = nil;
     {
         month = @"01";
         
-        year = [NSString stringWithFormat:@"%D", [dateComponents year] + 1];
+        year = [NSString stringWithFormat:@"%lD", [dateComponents year] + 1];
     } else if ([month length] == 1) {
         month = [NSString stringWithFormat:@"0%@", month];
     }
@@ -698,10 +700,6 @@ NSString* message = nil;
         done = YES;
         
         return NO;
-    }
-    
-    if ([[data lowercaseString] rangeOfString:@"session is compromised"].location != NSNotFound) {
-        NSLog(@"Broken");
     }
     
     [self updateProgress:@"Parsing second schedule"];
