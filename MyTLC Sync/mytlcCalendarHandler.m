@@ -281,33 +281,40 @@ NSString* message = nil;
 /* Handles the parsing of the schedule data */
 - (NSMutableArray*) parseSchedule:(NSString*) data
 {
-    if ([data rangeOfString:@"calMonthTitle"].location == NSNotFound)
+    if ([data rangeOfString:@"pageTitle"].location == NSNotFound)
     {
         return nil;
     }
     
-    NSRange begin = [data rangeOfString:@"calMonthTitle"];
+    /* Gets the Previous Month and Year data*/
     
-    NSString* sMonth = [data substringFromIndex:begin.location + 15];
+    NSRange begin = [data rangeOfString:@"Details of "];
     
-    NSRange end = [sMonth rangeOfString:@"</span>"];
+    NSString* sMonth = [data substringFromIndex:begin.location + 11];
+    
+    NSRange end = [sMonth rangeOfString:@"/"];
     
     sMonth = [sMonth substringToIndex:end.location];
     
-    if ([data rangeOfString:@"calYearTitle"].location == NSNotFound)
+
+    /* Gets the info for the Previous Month, Year */
+    if ([data rangeOfString:@"pageTitle"].location == NSNotFound)
     {
         return nil;
     }
     
-    begin = [data rangeOfString:@"calYearTitle"];
+    /* Captures the Year from MyTLC */
+    begin = [data rangeOfString:@"Details of "];
     
-    NSString* sYear = [data substringFromIndex:begin.location + 14];
+    NSString* sYear = [data substringFromIndex:begin.location + 17];
     
-    end = [sYear rangeOfString:@"</span>"];
+    end = [sYear rangeOfString:@"'"];
     
     sYear = [sYear substringToIndex:end.location];
+
     
-    if ([data rangeOfString:@"calWeekDayHeader"].location == NSNotFound)
+        
+    if ([data rangeOfString:@"calWeekDayHeader"].location == NSNotFound) /**/
     {
         return nil;
     }
@@ -397,15 +404,20 @@ NSString* message = nil;
                 mytlcShift* shift = [[mytlcShift alloc] init];
                 
                 shift.department = dept;
-            
+                
+                /* Splits the shift for StartTime (StartDate) and EndTime (EndDate)*/
                 NSRange split = [shifts[i] rangeOfString:@" - "];
                 
+                /* StartTime (StartDate) */
                 NSString* time = [shifts[i] substringToIndex:split.location];
+                time = [time stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+
                 
                 shift.startDate = [self parseTime:[NSString stringWithFormat:@"%@ %@, %@ %@", sMonth, date, sYear, time]];
                 
                 shift.startDate = [shift.startDate dateByAddingTimeInterval:offset];
                 
+                /* EndTime (EndDate) */
                 time = [shifts[i] substringFromIndex:split.location + 3];
                 
                 shift.endDate = [self parseTime:[NSString stringWithFormat:@"%@ %@, %@ %@", sMonth, date, sYear, time]];
@@ -425,16 +437,21 @@ NSString* message = nil;
     return workDays;
 }
 
+
 - (NSDate*) parseTime:(NSString*) time
 {
-    NSDateFormatter* df = [[NSDateFormatter alloc] init];
+    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     
-    [df setDateFormat:@"MMMM dd, yyyy hh:mm a"];
+    [dateFormatter setDateFormat:@"MM dd, yyyy hh:mm a"];
     
-    NSDate* date = [df dateFromString:time];
+    time = [time stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    NSDate* date = [dateFormatter dateFromString:time];
     
     return date;
 }
+
+
 
 - (NSString*) parseToken:(NSString*) data
 {
@@ -649,15 +666,15 @@ NSString* message = nil;
     
     NSDateComponents* dateComponents = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:[NSDate date]];
     
-    NSString* month = [NSString stringWithFormat:@"%lD", [dateComponents month] + 1];
+    NSString* month = [NSString stringWithFormat:@"%D", [dateComponents month] +1];
     
-    NSString* year = [NSString stringWithFormat:@"%lD", (long) [dateComponents year]];
+    NSString* year = [NSString stringWithFormat:@"%lD", (long) [dateComponents year] +1];
     
     if ([month isEqualToString:@"13"])
     {
         month = @"01";
         
-        year = [NSString stringWithFormat:@"%lD", [dateComponents year] + 1];
+        year = [NSString stringWithFormat:@"%D", [dateComponents year] + 1];
     } else if ([month length] == 1) {
         month = [NSString stringWithFormat:@"0%@", month];
     }
