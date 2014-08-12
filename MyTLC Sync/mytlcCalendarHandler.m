@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 Devin Collins <devin@imdevinc.com>
+ * Copyright 2014 Mike Wohlrab <Mike@NeoNet.me>
  *
  * This file is part of MyTLC Sync.
  *
@@ -276,18 +277,8 @@ NSString* message = nil;
     return newMessageExists;
 }
 
-/*
-- (BOOL) isTLCActive:(NSString*) data
-{
-    if ([data rangeOfString:@"/etm/time/timesheet/etmTnsMonth.jsp"].location == NSNotFound)
-    {
-        return FALSE;
-    }
-    
-    return TRUE;
-}
- */
 
+/* Handles the parsing of the schedule data */
 - (NSMutableArray*) parseSchedule:(NSString*) data
 {
     if ([data rangeOfString:@"calMonthTitle"].location == NSNotFound)
@@ -603,6 +594,7 @@ NSString* message = nil;
         return NO;
     }
     
+    /* Logging in to the MyTLC System */
     [self updateProgress:@"Logging in..."];
     
     data = [self postData:@"https://mytlc.bestbuy.com/etm/login.jsp" params:params];
@@ -616,7 +608,7 @@ NSString* message = nil;
         return NO;
     }
     
-    /*
+    /* Can cause issues with Managers not being able to get their schedule, or checking in general.
     if (![self isTLCActive:data])
     {
         [self updateProgress:@"MyTLC is currently undergoing maintenance, please try again later"];
@@ -628,7 +620,7 @@ NSString* message = nil;
     
     [self updateProgress:@"Getting schedule"];
     
-    data = [self getData:@"/etm/time/timesheet/etmTnsMonth.jsp"];
+    data = [self getData:@"https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp"];
     
     if (!data)
     {
