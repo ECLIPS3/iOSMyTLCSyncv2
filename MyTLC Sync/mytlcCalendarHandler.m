@@ -361,6 +361,8 @@ NSString* message = nil;
             date = [schedule substringFromIndex:begin.location + 23];
         }
         
+        
+        
         if (!date)
         {
             continue;
@@ -608,15 +610,6 @@ NSString* message = nil;
         return NO;
     }
     
-    /* Can cause issues with Managers not being able to get their schedule, or checking in general.
-    if (![self isTLCActive:data])
-    {
-        [self updateProgress:@"MyTLC is currently undergoing maintenance, please try again later"];
-        
-        done = YES;
-        
-        return NO;
-    }*/
     
     [self updateProgress:@"Getting schedule"];
     
