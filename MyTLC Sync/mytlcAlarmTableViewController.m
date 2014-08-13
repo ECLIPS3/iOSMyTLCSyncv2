@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 Devin Collins <devin@imdevinc.com>
+ * Copyright 2014 Mike Wohlrab <Mike@NeoNet.me>
  *
  * This file is part of MyTLC Sync.
  *
