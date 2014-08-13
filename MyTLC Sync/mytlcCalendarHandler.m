@@ -662,11 +662,11 @@ NSString* message = nil;
     
     [self updateProgress:@"Formatting shifts"];
     
-    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSCalendar* calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
     
     NSDateComponents* dateComponents = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:[NSDate date]];
     
-    NSString* month = [NSString stringWithFormat:@"%D", [dateComponents month] +1];
+    NSString* month = [NSString stringWithFormat:@"%lD", [dateComponents month] +1];
     
     NSString* year = [NSString stringWithFormat:@"%lD", (long) [dateComponents year] +1];
     
@@ -674,7 +674,7 @@ NSString* message = nil;
     {
         month = @"01";
         
-        year = [NSString stringWithFormat:@"%D", [dateComponents year] + 1];
+        year = [NSString stringWithFormat:@"%lD", [dateComponents year] + 1];
     } else if ([month length] == 1) {
         month = [NSString stringWithFormat:@"0%@", month];
     }
