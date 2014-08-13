@@ -228,11 +228,12 @@ BOOL showNotifications = NO;
     
     NSInteger version = [defaults integerForKey:@"version"];
     
+    /* Display the changelog on new release */
     if (version < 1)
     {
         [defaults setValue:@"Work @ Best Buy" forKey:@"title"];
         
-        [self displayAlert:@"Changelog:\n - Fixed Settings Icon\n - Changed Default Event Title"];
+        [self displayAlert:@"Changelog:\n - Initial iOS Release\n - Updated to work with new MyTLC Release"];
         
         [defaults setInteger:1 forKey:@"version"];
         

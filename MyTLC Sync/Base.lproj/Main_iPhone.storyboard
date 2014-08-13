@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6205" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="LQ4-52-nbm">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="14A314h" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="LQ4-52-nbm">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6198"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--MyTLC Sync-->
+        <!--Mytlc Main View Controller - MyTLC Sync-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
                 <viewController title="MyTLC Sync" id="vXZ-lx-hvc" customClass="mytlcMainViewController" sceneMemberID="viewController">
@@ -110,7 +110,7 @@
             </objects>
             <point key="canvasLocation" x="1791" y="35"/>
         </scene>
-        <!--Settings-->
+        <!--Mytlc Settings Table View Controller - Settings-->
         <scene sceneID="rO6-lg-fNl">
             <objects>
                 <tableViewController id="JMp-3r-R4S" customClass="mytlcSettingsTableViewController" sceneMemberID="viewController">
@@ -271,7 +271,7 @@
             </objects>
             <point key="canvasLocation" x="2570" y="35"/>
         </scene>
-        <!--Event Title-->
+        <!--Mytlc Event Title View Controller - Event Title-->
         <scene sceneID="6fD-lU-uSF">
             <objects>
                 <viewController id="Q4X-ZL-d8b" customClass="mytlcEventTitleViewController" sceneMemberID="viewController">
@@ -305,7 +305,7 @@
             </objects>
             <point key="canvasLocation" x="3448" y="-1273"/>
         </scene>
-        <!--Calendar-->
+        <!--Mytlc Calendar Select Table View Controller - Calendar-->
         <scene sceneID="Qpg-0G-YQG">
             <objects>
                 <tableViewController id="RL5-GR-j0u" customClass="mytlcCalendarSelectTableViewController" sceneMemberID="viewController">
@@ -345,7 +345,7 @@
             </objects>
             <point key="canvasLocation" x="3448" y="-568"/>
         </scene>
-        <!--Alarm-->
+        <!--Mytlc Alarm Table View Controller - Alarm-->
         <scene sceneID="zfI-gN-P8F">
             <objects>
                 <tableViewController id="wEz-9Z-G7S" customClass="mytlcAlarmTableViewController" sceneMemberID="viewController">
@@ -495,7 +495,7 @@
             </objects>
             <point key="canvasLocation" x="3448" y="108"/>
         </scene>
-        <!--Day to Sync-->
+        <!--Mytlc Sync Settings Table View Controller - Day to Sync-->
         <scene sceneID="ShD-23-Lk3">
             <objects>
                 <tableViewController id="Kr3-WZ-Gg5" customClass="mytlcSyncSettingsTableViewController" sceneMemberID="viewController">
@@ -768,7 +768,7 @@
             </objects>
             <point key="canvasLocation" x="3050" y="108"/>
         </scene>
-        <!--Timezone Offset-->
+        <!--Mytlc Hour Offset Table View Controller - Timezone Offset-->
         <scene sceneID="8pV-Kt-lko">
             <objects>
                 <tableViewController id="fyn-Z9-4dJ" customClass="mytlcHourOffsetTableViewController" sceneMemberID="viewController">
@@ -1023,7 +1023,7 @@
             </objects>
             <point key="canvasLocation" x="3050" y="1467"/>
         </scene>
-        <!--Address-->
+        <!--Mytlc Address View Controller - Address-->
         <scene sceneID="I2I-ha-eM5">
             <objects>
                 <viewController id="eFJ-JB-AkO" customClass="mytlcAddressViewController" sceneMemberID="viewController">
@@ -1181,9 +1181,6 @@
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4">
-            <size key="portraitSize" width="320" height="568"/>
-            <size key="landscapeSize" width="568" height="320"/>
-        </simulatedScreenMetrics>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
 </document>
