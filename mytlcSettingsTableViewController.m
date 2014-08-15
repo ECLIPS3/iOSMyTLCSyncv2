@@ -159,28 +159,28 @@
             display = @"-3 Hours";
             break;
         case -2:
-            display = @"-2 Hours";
+            display = @"-2 Hours (PST)";
             break;
         case -1:
-            display = @"-1 Hour";
+            display = @"-1 Hour (MST)";
             break;
         case 0:
-            display = @"None";
+            display = @"None (CST)";
             break;
         case 1:
-            display = @"1 Hour";
+            display = @"+1 Hour (EST)";
             break;
         case 2:
-            display = @"2 Hours";
+            display = @"+2 Hours";
             break;
         case 3:
-            display = @"3 Hours";
+            display = @"+3 Hours";
             break;
         case 4:
-            display = @"4 Hours";
+            display = @"+4 Hours";
             break;
         case 5:
-            display = @"5 Hours";
+            display = @"+5 Hours";
             break;
     }
     
@@ -197,7 +197,7 @@
     
     [self loadAlarmSettings];
     
-//    [self loadSyncSettings];
+    [self loadSyncSettings];
     
     [self loadOffsetSettings];
     

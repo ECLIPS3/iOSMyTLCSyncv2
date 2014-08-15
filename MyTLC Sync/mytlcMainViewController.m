@@ -229,6 +229,8 @@ BOOL showNotifications = NO;
     NSInteger version = [defaults integerForKey:@"version"];
     
     /* Display the changelog on new release */
+    /* Display the changelog on new release */
+    /* Display the changelog on new release */
     if (version < 1)
     {
         [defaults setValue:@"Work @ Best Buy" forKey:@"title"];
@@ -283,5 +285,12 @@ BOOL showNotifications = NO;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
+
+
+
+
+
 
 @end
