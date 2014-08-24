@@ -29,6 +29,8 @@ BOOL newMessageExists = NO;
 EKEventStore* eventStore = nil;
 NSString* message = nil;
 
+
+// Makes sure that we have permission to access the Calendars
 - (void) checkCalendarAccess:(NSMutableArray*) shifts
 {
     eventStore = [[EKEventStore alloc] init];
@@ -195,6 +197,7 @@ NSString* message = nil;
     return result;
 }
 
+// Gets the Store Address via Address Lookup in Settings
 - (NSString*) getAddress
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
