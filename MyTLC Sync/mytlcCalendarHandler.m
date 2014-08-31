@@ -119,7 +119,8 @@ NSString* message = nil;
     
     return newShifts;
 }
-                           
+
+// Creates the shifts to add to the Calendar
 - (void) createCalendarEntries:(NSMutableArray*) shifts
 {
     int count = 0;
@@ -212,6 +213,7 @@ NSString* message = nil;
     return address;
 }
 
+// Gets alarm settings
 - (NSUInteger) getAlarmSettings
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -219,6 +221,7 @@ NSString* message = nil;
     return [defaults integerForKey:@"alarm"];
 }
 
+// Gets Event Title
 - (NSString*) getTitle
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -256,6 +259,7 @@ NSString* message = nil;
     return offset;
 }
 
+// Gets the ID associated with the Calendar
 - (NSString*) getSelectedCalendarId
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -300,13 +304,13 @@ NSString* message = nil;
     sMonth = [sMonth substringToIndex:end.location];
     
 
-    /* Gets the info for the Previous Month, Year */
+    // Gets the info for the Previous Month, Year
     if ([data rangeOfString:@"pageTitle"].location == NSNotFound)
     {
         return nil;
     }
     
-    /* Captures the Year from MyTLC */
+    // Captures the Year from MyTLC
     begin = [data rangeOfString:@"Details of "];
     
     NSString* sYear = [data substringFromIndex:begin.location + 17];
@@ -317,7 +321,7 @@ NSString* message = nil;
 
     
         
-    if ([data rangeOfString:@"calWeekDayHeader"].location == NSNotFound) /**/
+    if ([data rangeOfString:@"calWeekDayHeader"].location == NSNotFound)
     {
         return nil;
     }
@@ -408,10 +412,10 @@ NSString* message = nil;
                 
                 shift.department = dept;
                 
-                /* Splits the shift for StartTime (StartDate) and EndTime (EndDate)*/
+                // Splits the shift for StartTime (StartDate) and EndTime (EndDate)
                 NSRange split = [shifts[i] rangeOfString:@" - "];
                 
-                /* StartTime (StartDate) */
+                // StartTime (StartDate)
                 NSString* time = [shifts[i] substringToIndex:split.location];
                 time = [time stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 
@@ -420,7 +424,7 @@ NSString* message = nil;
                 
                 shift.startDate = [shift.startDate dateByAddingTimeInterval:offset];
                 
-                /* EndTime (EndDate) */
+                // EndTime (EndDate)
                 time = [shifts[i] substringFromIndex:split.location + 3];
                 
                 shift.endDate = [self parseTime:[NSString stringWithFormat:@"%@ %@, %@ %@", sMonth, date, sYear, time]];
@@ -616,7 +620,7 @@ NSString* message = nil;
         return NO;
     }
     
-    /* Logging in to the MyTLC System */
+    // Logging in to the MyTLC System
     [self updateProgress:@"Logging in..."];
     
     data = [self postData:@"https://mytlc.bestbuy.com/etm/login.jsp" params:params];
@@ -644,10 +648,13 @@ NSString* message = nil;
         return NO;
     }
     
+    // Performs first parsing of the Schedule
     [self updateProgress:@"Parsing shifts"];
     
     NSMutableArray* shifts = [self parseSchedule:data];
     
+    
+    // Starts the Second Parsing
     [self updateProgress:@"Getting next security token"];
     
     NSString* securityToken = [self parseToken2:data];
@@ -669,15 +676,16 @@ NSString* message = nil;
     
     NSDateComponents* dateComponents = [calendar components:(NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitYear) fromDate:[NSDate date]];
     
-    NSString* month = [NSString stringWithFormat:@"%lD", [dateComponents month] +1];
+    // Checks Next Month for shifts
+    NSString* month = [NSString stringWithFormat:@"%ld", (long) [dateComponents month] +1];
     
-    NSString* year = [NSString stringWithFormat:@"%lD", (long) [dateComponents year] +1];
+    NSString* year = [NSString stringWithFormat:@"%ld", (long) [dateComponents year]];
     
     if ([month isEqualToString:@"13"])
     {
         month = @"01";
         
-        year = [NSString stringWithFormat:@"%lD", [dateComponents year] + 1];
+        year = [NSString stringWithFormat:@"%ld", (long) [dateComponents year] + 1];
     } else if ([month length] == 1) {
         month = [NSString stringWithFormat:@"0%@", month];
     }
@@ -686,7 +694,8 @@ NSString* message = nil;
     
     [self updateProgress:@"Creating parameters for second schedule"];
     
-    params = [self createParams:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"pageAction", date, @"NEW_MONTH_YEAR", securityToken, @"secureToken", wbat, @"wbat", @"11", @"selectedTocId", @"10", @"parentID", @"false", @"homePageButtonWasSelected", @"", @"bid1_action", @"0", @"bid1_current_row", @"", @"STATUS_MESSAGE_HIDDEN", @"0", @"wbXpos", @"0", @"wbYpos", nil]];
+    // testing changing selected TocId to 0 (previous value) & parentid to 0
+    params = [self createParams:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"pageAction", date, @"NEW_MONTH_YEAR", securityToken, @"secureToken", wbat, @"wbat", @"0", @"selectedTocId", @"0", @"parentID", @"false", @"homePageButtonWasSelected", @"", @"bid1_action", @"0", @"bid1_current_row", @"", @"STATUS_MESSAGE_HIDDEN", @"0", @"wbXpos", @"0", @"wbYpos", nil]];
     
     if (!params)
     {
@@ -713,6 +722,8 @@ NSString* message = nil;
     [self updateProgress:@"Parsing second schedule"];
     
     NSMutableArray* shifts2 = [self parseSchedule:data];
+    
+    
     
     if ([shifts2 count] > 0)
     {

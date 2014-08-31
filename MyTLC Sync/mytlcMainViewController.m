@@ -233,7 +233,7 @@ BOOL showNotifications = NO;
     {
         [defaults setValue:@"Work @ Best Buy" forKey:@"title"];
         
-        [self displayAlert:@"Changelog:\n - Initial iOS Release\n - Updated to work with new MyTLC Release"];
+        [self displayAlert:@"Changelog:\n - Now properly scans upcoming month for schedule"];
         
         [defaults setInteger:1 forKey:@"version"];
         
