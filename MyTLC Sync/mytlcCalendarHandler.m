@@ -694,7 +694,7 @@ NSString* message = nil;
     
     [self updateProgress:@"Creating parameters for second schedule"];
     
-    // testing changing selected TocId to 0 (previous value) & parentid to 0
+    // Creates the parameters needed to check the next month for a schedule
     params = [self createParams:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"", @"pageAction", date, @"NEW_MONTH_YEAR", securityToken, @"secureToken", wbat, @"wbat", @"0", @"selectedTocId", @"0", @"parentID", @"false", @"homePageButtonWasSelected", @"", @"bid1_action", @"0", @"bid1_current_row", @"", @"STATUS_MESSAGE_HIDDEN", @"0", @"wbXpos", @"0", @"wbYpos", nil]];
     
     if (!params)
@@ -708,6 +708,7 @@ NSString* message = nil;
     
     [self updateProgress:@"Checking for more shifts..."];
     
+    // Gets the data results back from retreiving the second months schedule
     data = [self postData:@"https://mytlc.bestbuy.com/etm/time/timesheet/etmTnsMonth.jsp" params:params];
     
     if (!data)
@@ -724,12 +725,13 @@ NSString* message = nil;
     NSMutableArray* shifts2 = [self parseSchedule:data];
     
     
-    
+    // Counts how many shifts are in the Second Month
     if ([shifts2 count] > 0)
     {
         [shifts addObjectsFromArray:shifts2];
     }
     
+    // Counts how many shifts are in the Current Month
     if ([shifts count] > 0)
     {
         [self updateProgress:@"Adding shifts to calendar"];
@@ -743,6 +745,7 @@ NSString* message = nil;
         done = YES;
     }
     
+    // Logs out as to not keep the Scheduled System logged in, not needed anymore
     [self getData:@"https://mytlc.bestbuy.com/etm/etmMenu.jsp?pageAction=logout"];
     
     return YES;
@@ -754,6 +757,7 @@ NSString* message = nil;
 }
 
 
+// Updates the Progress Notification Label on Home Screen of the App
 - (void) updateProgress:(NSString*) newMessage
 {
     message = newMessage;

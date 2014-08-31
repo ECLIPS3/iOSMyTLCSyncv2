@@ -226,20 +226,7 @@ BOOL showNotifications = NO;
     
     BOOL firstRun = ![defaults boolForKey:@"firstRun"];
     
-    NSInteger version = [defaults integerForKey:@"version"];
-    
-    /* Display the changelog on new release */
-    if (version < 1)
-    {
-        [defaults setValue:@"Work @ Best Buy" forKey:@"title"];
-        
-        [self displayAlert:@"Changelog:\n - Now properly scans upcoming month for schedule"];
-        
-        [defaults setInteger:1 forKey:@"version"];
-        
-        [defaults synchronize];
-        
-    }
+    // Removed Version and Changelog notification
     
     if (firstRun) {
         [defaults setBool:YES forKey:@"firstRun"];
