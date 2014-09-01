@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03252E521829C6A7001AF9E1 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03252E511829C6A7001AF9E1 /* Security.framework */; };
 		034E9042181D6E8600B9B368 /* mytlcShift.m in Sources */ = {isa = PBXBuildFile; fileRef = 034E9041181D6E8600B9B368 /* mytlcShift.m */; };
 		03675A8B181ADAB300FEB41E /* mytlcMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03675A8A181ADAB300FEB41E /* mytlcMainViewController.m */; };
 		03675A91181AF49D00FEB41E /* mytlcCalendarHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 03675A90181AF49D00FEB41E /* mytlcCalendarHandler.m */; };
@@ -33,6 +32,8 @@
 		03E4760D182DDF0C0089797A /* mytlcAlarmTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E4760C182DDF0C0089797A /* mytlcAlarmTableViewController.m */; };
 		03E47610182E18EA0089797A /* mytlcSyncSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E4760F182E18EA0089797A /* mytlcSyncSettingsTableViewController.m */; };
 		03ED4455184C419F007378B2 /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 03ED4454184C419F007378B2 /* COPYING */; };
+		D634E6AC19B4B3210094F67E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03252E511829C6A7001AF9E1 /* Security.framework */; };
+		D634E6B119B4BE460094F67E /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D634E6B019B4BE460094F67E /* KeychainItemWrapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,9 @@
 		03E4760E182E18EA0089797A /* mytlcSyncSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mytlcSyncSettingsTableViewController.h; sourceTree = "<group>"; };
 		03E4760F182E18EA0089797A /* mytlcSyncSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mytlcSyncSettingsTableViewController.m; sourceTree = "<group>"; };
 		03ED4454184C419F007378B2 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		D634E6AF19B4BE460094F67E /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		D634E6B019B4BE460094F67E /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
+		D6766E5019B44AB400E3EB11 /* MyTLC Sync.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTLC Sync.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				03252E521829C6A7001AF9E1 /* Security.framework in Frameworks */,
+				D634E6AC19B4B3210094F67E /* Security.framework in Frameworks */,
 				03675A96181B2C4B00FEB41E /* EventKit.framework in Frameworks */,
 				03C36E6E181AC4C90018AB0A /* CoreGraphics.framework in Frameworks */,
 				03C36E70181AC4C90018AB0A /* UIKit.framework in Frameworks */,
@@ -151,6 +155,7 @@
 		03C36E71181AC4C90018AB0A /* MyTLC Sync */ = {
 			isa = PBXGroup;
 			children = (
+				D6766E5019B44AB400E3EB11 /* MyTLC Sync.entitlements */,
 				03C36E7D181AC4C90018AB0A /* Main_iPhone.storyboard */,
 				03C36E86181AC4C90018AB0A /* Images.xcassets */,
 				03C36E72181AC4C90018AB0A /* Supporting Files */,
@@ -171,6 +176,8 @@
 				03BDEACB18368CA50074F7A6 /* mytlcHourOffsetTableViewController.m */,
 				03675A89181ADAB300FEB41E /* mytlcMainViewController.h */,
 				03675A8A181ADAB300FEB41E /* mytlcMainViewController.m */,
+				D634E6AF19B4BE460094F67E /* KeychainItemWrapper.h */,
+				D634E6B019B4BE460094F67E /* KeychainItemWrapper.m */,
 				03E47605182C0B4C0089797A /* mytlcSettingsTableViewController.h */,
 				03E47606182C0B4C0089797A /* mytlcSettingsTableViewController.m */,
 				034E9040181D6E8600B9B368 /* mytlcShift.h */,
@@ -267,6 +274,9 @@
 							com.apple.DataProtection = {
 								enabled = 0;
 							};
+							com.apple.Keychain = {
+								enabled = 1;
+							};
 						};
 					};
 					03C36E8B181AC4C90018AB0A = {
@@ -322,6 +332,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03675A8B181ADAB300FEB41E /* mytlcMainViewController.m in Sources */,
+				D634E6B119B4BE460094F67E /* KeychainItemWrapper.m in Sources */,
 				03E4760A182C57050089797A /* mytlcCalendarSelectTableViewController.m in Sources */,
 				03BC3239186FBCBD0099D416 /* mytlcEventTitleViewController.m in Sources */,
 				03675A91181AF49D00FEB41E /* mytlcCalendarHandler.m in Sources */,
@@ -398,10 +409,10 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.2;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -418,9 +429,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "9b404fdd-5e2b-440f-978b-e5889e657df4";
+				PROVISIONING_PROFILE = "38ca0ed4-f544-4656-bacb-f7ba5901ed50";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -441,10 +453,10 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 1.2;
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -454,7 +466,8 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				PROVISIONING_PROFILE = "9b404fdd-5e2b-440f-978b-e5889e657df4";
+				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "38ca0ed4-f544-4656-bacb-f7ba5901ed50";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
 				VALIDATE_PRODUCT = YES;
@@ -467,14 +480,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
+				CODE_SIGN_ENTITLEMENTS = "MyTLC Sync/MyTLC Sync.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTLC Sync/MyTLC Sync-Prefix.pch";
 				INFOPLIST_FILE = "MyTLC Sync/MyTLC Sync-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "01abe6a0-4885-4c36-adf5-141078e24221";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "";
 				WRAPPER_EXTENSION = app;
@@ -486,15 +500,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Mike Wohlrab (QC5W5J7MSN)";
+				CODE_SIGN_ENTITLEMENTS = "MyTLC Sync/MyTLC Sync.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MyTLC Sync/MyTLC Sync-Prefix.pch";
 				INFOPLIST_FILE = "MyTLC Sync/MyTLC Sync-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "01abe6a0-4885-4c36-adf5-141078e24221";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "";
 				WRAPPER_EXTENSION = app;

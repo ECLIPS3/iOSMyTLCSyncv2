@@ -20,6 +20,7 @@
 
 #import "mytlcMainViewController.h"
 #import "mytlcCalendarHandler.h"
+#import "KeychainItemWrapper.h"
 #import <Security/Security.h>
 
 
@@ -37,9 +38,9 @@
 @synthesize chkSave;
 @synthesize scrollView;
 
+
 mytlcCalendarHandler* ch = nil;
 BOOL showNotifications = NO;
-
 - (void) checkStatus
 {
     while (![ch hasCompleted])
@@ -113,11 +114,12 @@ BOOL showNotifications = NO;
 
 - (void) autologin:(void (^)(UIBackgroundFetchResult))completionHandler
 {
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
-    NSString* username = [defaults valueForKey:@"username"];
     
-    NSString* password = [defaults valueForKey:@"password"];
+    // testing using mytlcMainViewController
+    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
+    // sets string username and password to that from the keychain
+    NSString *username = [keychainItem objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [keychainItem objectForKey:(__bridge id)(kSecValueData)];
     
     self.fetchCompletionHandler = completionHandler;
     
@@ -132,29 +134,31 @@ BOOL showNotifications = NO;
     
     [lblStatus setText:@""];
     
-    NSString* username = [txtUsername text];
-    NSString* password = [txtPassword text];
-    
-    if ([username isEqualToString:@""] || [password isEqualToString:@""])
+    // If username or password is blank then alert user
+    if ([txtUsername.text isEqualToString:@""] || [txtPassword.text isEqualToString:@""])
     {
         [self displayAlert:@"Please enter a username and password"];
         
         return;
     }
     
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    
+    // If user lets us save the creds, then keep them saved
     if ([chkSave isOn]) {
-        [defaults setValue:username forKey:@"username"];
+    
+        // Sets Username and Password to data from the text field
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
+        [keychainItem setObject:[txtUsername text] forKey:(__bridge id)(kSecAttrAccount)];
+        [keychainItem setObject:[txtPassword text] forKey:(__bridge id)(kSecValueData)];
         
-        [defaults setValue:password forKey:@"password"];
+    // Otherwise remove them from keychain
     } else {
-        [defaults removeObjectForKey:@"username"];
         
-        [defaults removeObjectForKey:@"password"];
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
+        [keychainItem resetKeychainItem];
     }
     
-    [defaults synchronize];
+    NSString *username = [txtUsername text];
+    NSString *password = [txtUsername text];
     
     [self login:username password:password];
 }
@@ -214,6 +218,7 @@ BOOL showNotifications = NO;
     [scrollView setContentOffset:CGPointMake(0, txtUsername.center.y - 120) animated:YES];
 }
 
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -243,14 +248,17 @@ BOOL showNotifications = NO;
         
         [defaults synchronize];
     } else {
-        NSString* username = [defaults valueForKey:@"username"];
         
-        NSString* password = [defaults valueForKey:@"password"];
+        // sets string username and password to that from the keychain
+        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
+        NSString *username = [keychainItem objectForKey:(__bridge id)(kSecAttrAccount)];
+        NSString *password = [keychainItem objectForKey:(__bridge id)(kSecValueData)];
         
         if (username != nil && password != nil) {
             [txtUsername setText:username];
             
             [txtPassword setText:password];
+            
             
             [chkSave setOn:YES];
         } else {
@@ -272,3 +280,8 @@ BOOL showNotifications = NO;
 }
 
 @end
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
