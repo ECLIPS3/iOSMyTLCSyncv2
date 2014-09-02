@@ -136,7 +136,7 @@
         if (!SecItemCopyMatching((__bridge CFDictionaryRef)tempQuery, (CFTypeRef *)&outDictionary) == noErr)
         {
             // Stick these default values into keychain item if nothing found.
-            [self resetKeychainItem];
+            [self resetKeychainItem]; //temp disable to make sure were not erasing what we just wrote
             
             // Add the generic attribute and the keychain access group.
             [keychainItemData setObject:identifier forKey:(__bridge id)kSecAttrGeneric];
@@ -330,5 +330,6 @@
     
     if(attributes) CFRelease(attributes);
 }
+
 
 @end

@@ -22,7 +22,7 @@
 #import "mytlcCalendarHandler.h"
 #import "KeychainItemWrapper.h"
 #import <Security/Security.h>
-
+#pragma GCC diagnostic ignored "-Wundeclared-selector"
 
 @interface mytlcMainViewController ()
 
@@ -143,22 +143,32 @@ BOOL showNotifications = NO;
     }
     
     // If user lets us save the creds, then keep them saved
+    
+    NSString *username = txtUsername.text;
+    NSString *password = txtPassword.text;
+        
+    KeychainItemWrapper *keychainItem;
+    
     if ([chkSave isOn]) {
     
-        // Sets Username and Password to data from the text field
-        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
-        [keychainItem setObject:[txtUsername text] forKey:(__bridge id)(kSecAttrAccount)];
-        [keychainItem setObject:[txtPassword text] forKey:(__bridge id)(kSecValueData)];
+        // Set Keychain Username and Password fields to that of the text boxes
+        keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
+        //[keychainItem setObject:@"MyTLCSyncLoginCreds" forKey:(__bridge id)(kSecAttrService)];
+        [keychainItem setObject:password forKey:(__bridge id)(kSecValueData)];
+        [keychainItem setObject:username forKey:(__bridge id)(kSecAttrAccount)];
+        
         
     // Otherwise remove them from keychain
     } else {
         
+        // Initiates a Keychain reset
         KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
         [keychainItem resetKeychainItem];
+        
+        // Sets the Password box to that of nil
+        txtPassword.text=@"";
     }
     
-    NSString *username = [txtUsername text];
-    NSString *password = [txtUsername text];
     
     [self login:username password:password];
 }
@@ -231,7 +241,15 @@ BOOL showNotifications = NO;
     
     BOOL firstRun = ![defaults boolForKey:@"firstRun"];
     
-    // Removed Version and Changelog notification
+    // check to see if we can retreive the login creds / if the user wants us to, otherwise skip retreival
+    
+    // sets string username and password to that from the keychain
+    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
+    NSString *username = [keychainItem objectForKey:(__bridge id)(kSecAttrAccount)];
+    
+    // IS RETURNING THE USERNAME BUT NOT THE PASSWORD. LOOK LIKE IT CAN FIND THE PASSWORD BUT ISN'T RETURNING IT PROPERLY.
+    NSString *password = [keychainItem objectForKey:(__bridge id)(kSecValueData)];
+    
     
     if (firstRun) {
         [defaults setBool:YES forKey:@"firstRun"];
@@ -249,16 +267,10 @@ BOOL showNotifications = NO;
         [defaults synchronize];
     } else {
         
-        // sets string username and password to that from the keychain
-        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
-        NSString *username = [keychainItem objectForKey:(__bridge id)(kSecAttrAccount)];
-        NSString *password = [keychainItem objectForKey:(__bridge id)(kSecValueData)];
         
         if (username != nil && password != nil) {
             [txtUsername setText:username];
-            
             [txtPassword setText:password];
-            
             
             [chkSave setOn:YES];
         } else {
