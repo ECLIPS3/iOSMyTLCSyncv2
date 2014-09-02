@@ -201,8 +201,9 @@
     
     // Default attributes for keychain item.
     [keychainItemData setObject:@"" forKey:(__bridge id)kSecAttrAccount];
-    [keychainItemData setObject:@"" forKey:(__bridge id)kSecAttrLabel];
+    [keychainItemData setObject:@"" forKey:(__bridge id)kSecValueData];
     [keychainItemData setObject:@"" forKey:(__bridge id)kSecAttrDescription];
+    [keychainItemData setObject:@"" forKey:(__bridge id)kSecAttrComment];
     
     // Default data for keychain item.
 #ifndef PASSWORD_USES_DATA
