@@ -30,10 +30,8 @@
 		03E47607182C0B4C0089797A /* mytlcSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E47606182C0B4C0089797A /* mytlcSettingsTableViewController.m */; };
 		03E4760A182C57050089797A /* mytlcCalendarSelectTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E47609182C57050089797A /* mytlcCalendarSelectTableViewController.m */; };
 		03E4760D182DDF0C0089797A /* mytlcAlarmTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E4760C182DDF0C0089797A /* mytlcAlarmTableViewController.m */; };
-		03E47610182E18EA0089797A /* mytlcSyncSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 03E4760F182E18EA0089797A /* mytlcSyncSettingsTableViewController.m */; };
 		03ED4455184C419F007378B2 /* COPYING in Resources */ = {isa = PBXBuildFile; fileRef = 03ED4454184C419F007378B2 /* COPYING */; };
 		D634E6AC19B4B3210094F67E /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03252E511829C6A7001AF9E1 /* Security.framework */; };
-		D634E6B119B4BE460094F67E /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D634E6B019B4BE460094F67E /* KeychainItemWrapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,11 +83,7 @@
 		03E47609182C57050089797A /* mytlcCalendarSelectTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mytlcCalendarSelectTableViewController.m; sourceTree = "<group>"; };
 		03E4760B182DDF0C0089797A /* mytlcAlarmTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mytlcAlarmTableViewController.h; sourceTree = "<group>"; };
 		03E4760C182DDF0C0089797A /* mytlcAlarmTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mytlcAlarmTableViewController.m; sourceTree = "<group>"; };
-		03E4760E182E18EA0089797A /* mytlcSyncSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mytlcSyncSettingsTableViewController.h; sourceTree = "<group>"; };
-		03E4760F182E18EA0089797A /* mytlcSyncSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mytlcSyncSettingsTableViewController.m; sourceTree = "<group>"; };
 		03ED4454184C419F007378B2 /* COPYING */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
-		D634E6AF19B4BE460094F67E /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
-		D634E6B019B4BE460094F67E /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 		D6766E5019B44AB400E3EB11 /* MyTLC Sync.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "MyTLC Sync.entitlements"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -176,14 +170,10 @@
 				03BDEACB18368CA50074F7A6 /* mytlcHourOffsetTableViewController.m */,
 				03675A89181ADAB300FEB41E /* mytlcMainViewController.h */,
 				03675A8A181ADAB300FEB41E /* mytlcMainViewController.m */,
-				D634E6AF19B4BE460094F67E /* KeychainItemWrapper.h */,
-				D634E6B019B4BE460094F67E /* KeychainItemWrapper.m */,
 				03E47605182C0B4C0089797A /* mytlcSettingsTableViewController.h */,
 				03E47606182C0B4C0089797A /* mytlcSettingsTableViewController.m */,
 				034E9040181D6E8600B9B368 /* mytlcShift.h */,
 				034E9041181D6E8600B9B368 /* mytlcShift.m */,
-				03E4760E182E18EA0089797A /* mytlcSyncSettingsTableViewController.h */,
-				03E4760F182E18EA0089797A /* mytlcSyncSettingsTableViewController.m */,
 			);
 			path = "MyTLC Sync";
 			sourceTree = "<group>";
@@ -275,7 +265,7 @@
 								enabled = 0;
 							};
 							com.apple.Keychain = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -332,7 +322,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				03675A8B181ADAB300FEB41E /* mytlcMainViewController.m in Sources */,
-				D634E6B119B4BE460094F67E /* KeychainItemWrapper.m in Sources */,
 				03E4760A182C57050089797A /* mytlcCalendarSelectTableViewController.m in Sources */,
 				03BC3239186FBCBD0099D416 /* mytlcEventTitleViewController.m in Sources */,
 				03675A91181AF49D00FEB41E /* mytlcCalendarHandler.m in Sources */,
@@ -341,7 +330,6 @@
 				03C36E7C181AC4C90018AB0A /* mytlcAppDelegate.m in Sources */,
 				034E9042181D6E8600B9B368 /* mytlcShift.m in Sources */,
 				03C36E78181AC4C90018AB0A /* main.m in Sources */,
-				03E47610182E18EA0089797A /* mytlcSyncSettingsTableViewController.m in Sources */,
 				03BDEACC18368CA50074F7A6 /* mytlcHourOffsetTableViewController.m in Sources */,
 				03E4760D182DDF0C0089797A /* mytlcAlarmTableViewController.m in Sources */,
 			);
@@ -480,7 +468,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = "MyTLC Sync/MyTLC Sync.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -500,7 +487,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = "MyTLC Sync/MyTLC Sync.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

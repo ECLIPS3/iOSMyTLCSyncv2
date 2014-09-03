@@ -41,7 +41,7 @@ NSString* message = nil;
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (err || !granted)
                 {
-                    [self updateProgress:@"Couldn't get access to the calendar, please check calendar permissions in your settings"];
+                    [self updateProgress:@"Couldn't get access to the calendar, please check calendar permissions in Settings.app > Privacy > Calendar"];
                     
                     done = YES;
                 }
@@ -459,7 +459,7 @@ NSString* message = nil;
 }
 
 
-
+// Parses the login token used to authenticate
 - (NSString*) parseToken:(NSString*) data
 {
     if ([data rangeOfString:@"End Hotkey for submit"].location == NSNotFound)
@@ -487,6 +487,7 @@ NSString* message = nil;
     return data;
 }
 
+// Parses the login token used to authenticate. 2nd instance so we can check 2nd month scheduled for events.
 - (NSString*) parseToken2:(NSString*) data
 {
     if ([data rangeOfString:@"secureToken"].location == NSNotFound)
@@ -510,6 +511,7 @@ NSString* message = nil;
     return data;
 }
 
+// Parses the wbat used for authentication.
 - (NSString*) parseWbat:(NSString*) data
 {
     if ([data rangeOfString:@"wbat"].location == NSNotFound)
@@ -533,6 +535,7 @@ NSString* message = nil;
     return data;
 }
 
+// Configuring the PostData used for submitting the Schedule Checking
 - (NSString*) postData:(NSString*) url params:(NSString*) params
 {
     NSURL* urlRequest = [NSURL URLWithString:url];
@@ -556,6 +559,7 @@ NSString* message = nil;
     return nil;
 }
 
+// Login System Handler for getting the schedule of events.
 - (BOOL) runEvents:(NSDictionary*)login
 {
     done = NO;
@@ -611,6 +615,7 @@ NSString* message = nil;
         return NO;
     }
     
+    // Creating the initial parameters used for checking the schedule
     params = [self createParams:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"login", @"pageAction", loginToken, @"url_login_token", wbat, @"wbat", username, @"login", password, @"password", @"DEFAULT", @"client", @"false", @"localeSelected", @"", @"STATUS_MESSAGE_HIDDEN", @"0", @"wbXpos", @"0", @"wbYpos" , nil]];
     
     if (!params)
@@ -681,6 +686,7 @@ NSString* message = nil;
     
     NSString* year = [NSString stringWithFormat:@"%ld", (long) [dateComponents year]];
     
+    // Adjusting month and year used used for setting the second month we will check for scheduled shifts
     if ([month isEqualToString:@"13"])
     {
         month = @"01";
@@ -690,6 +696,7 @@ NSString* message = nil;
         month = [NSString stringWithFormat:@"0%@", month];
     }
     
+    // Formatting the date we will be telling the PostData and caldendar page on MyTLC to get the second month of shifts.
     NSString* date = [NSString stringWithFormat:@"%@/%@", month, year];
     
     [self updateProgress:@"Creating parameters for second schedule"];
@@ -747,6 +754,10 @@ NSString* message = nil;
     
     // Logs out as to not keep the Scheduled System logged in, not needed anymore
     [self getData:@"https://mytlc.bestbuy.com/etm/etmMenu.jsp?pageAction=logout"];
+    
+    // Clears the Username and Password strings after checking the schedule to make sure all credentials are cleared when not needed
+    username = @"";
+    password = @"";
     
     return YES;
 }

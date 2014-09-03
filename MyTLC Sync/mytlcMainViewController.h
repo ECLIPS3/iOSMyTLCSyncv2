@@ -34,6 +34,5 @@
 - (IBAction) manualLogin;
 - (IBAction) hideKeyboard;
 - (IBAction) deleteEvent;
-- (void) autologin:(void (^)(UIBackgroundFetchResult))completionHandler;
 
 @end

@@ -20,7 +20,6 @@
 
 #import "mytlcMainViewController.h"
 #import "mytlcCalendarHandler.h"
-#import "KeychainItemWrapper.h"
 #import <Security/Security.h>
 #pragma GCC diagnostic ignored "-Wundeclared-selector"
 
@@ -55,6 +54,8 @@ BOOL showNotifications = NO;
     }
 }
 
+// Needs revisement to make sure we can delete the events from the calendar and not just from the cache
+// "If you want to remove an event from the Calendar database, use the EKEventStore method removeEvent:span:commit:error:"
 - (void) deleteEvent
 {
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
@@ -112,22 +113,6 @@ BOOL showNotifications = NO;
     [scrollView setContentOffset:CGPointMake(0,0) animated:YES];
 }
 
-- (void) autologin:(void (^)(UIBackgroundFetchResult))completionHandler
-{
-    
-    // testing using mytlcMainViewController
-    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
-    // sets string username and password to that from the keychain
-    NSString *username = [keychainItem objectForKey:(__bridge id)(kSecAttrAccount)];
-    NSString *password = [keychainItem objectForKey:(__bridge id)(kSecValueData)];
-    
-    self.fetchCompletionHandler = completionHandler;
-    
-    showNotifications = YES;
-    
-    [self login:username password:password];
-}
-
 - (IBAction) manualLogin
 {
     [self hideKeyboard];
@@ -142,31 +127,13 @@ BOOL showNotifications = NO;
         return;
     }
     
-    // Sets initial Username and Password variables to that of the text boxes and initializes the Keychain Wrapper
+    // Sets initial Username and Password variables to that of the text boxes
     NSString *username = txtUsername.text;
     NSString *password = txtPassword.text;
-    KeychainItemWrapper *keychainItem;
-    
-    // If user selected to save creds
-    if ([chkSave isOn]) {
-    
-        keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
-        [keychainItem setObject:username forKey:(__bridge id)(kSecAttrAccount)];
-        [keychainItem setObject:password forKey:(__bridge id)(kSecValueData)];
-        [keychainItem setObject:@"MyTLC Sycn App credentials" forKey:(__bridge id)(kSecAttrDescription)];
-        [keychainItem setObject:@"Saves the Username and Password for MyTLC Sync App" forKey:(__bridge id)(kSecAttrComment)];
         
-    // Otherwise remove them from keychain
-    } else {
-        
-        // Initiates a Keychain reset
-        KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
-        [keychainItem resetKeychainItem];
-        
-        // Sets the Username and Password box to that of nil
-        txtPassword.text=@"";
-        txtUsername.text=@"";
-    }
+    // Clears the text boxes as creds aren't allowed to be saved
+    txtPassword.text=@"";
+    txtUsername.text=@"";
     
     
     [self login:username password:password];
@@ -239,13 +206,6 @@ BOOL showNotifications = NO;
     NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
     
     BOOL firstRun = ![defaults boolForKey:@"firstRun"];
-    
-    // Attempts to retreived saved creds from Keychain Data. If nothing there, it returns ""
-    KeychainItemWrapper *keychainItem = [[KeychainItemWrapper alloc] initWithIdentifier:@"MyTLCSyncLoginCreds" accessGroup:nil];
-    NSString *username = [keychainItem objectForKey:(__bridge id)(kSecAttrAccount)];
-    NSData *encryptedPwd = [keychainItem objectForKey:(__bridge id)(kSecValueData)];
-    NSString *password = [[NSString alloc] initWithData:encryptedPwd encoding:NSUTF8StringEncoding];
-    
 
     if (firstRun) {
         [defaults setBool:YES forKey:@"firstRun"];
@@ -263,16 +223,6 @@ BOOL showNotifications = NO;
         [defaults synchronize];
     } else {
         
-        // Checks if the username or password variables are blank. Sets appropraite Checkbox for cached creds
-        if (![username isEqual: @""] && ![password isEqual: @""]) {
-            [txtUsername setText:username];
-            [txtPassword setText:password];
-            [chkSave setOn:YES];
-            
-        } else {
-            [chkSave setOn:NO];
-            
-        }
     }
     
 }
