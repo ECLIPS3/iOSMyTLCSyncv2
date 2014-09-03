@@ -27,6 +27,7 @@
 
 @implementation mytlcSettingsTableViewController
 
+@synthesize lblMyTLCSyncVersion;
 @synthesize settingsTable;
 
 - (void) checkCalendarPermissions
@@ -197,64 +198,9 @@
     
     [self loadAlarmSettings];
     
-//    [self loadSyncSettings];
-    
     [self loadOffsetSettings];
     
     [self loadAddress];
-}
-
-- (void) loadSyncSettings
-{
-    NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-    
-    NSUInteger alarm = [defaults integerForKey:@"sync_day"];
-    
-    NSString* time = [defaults valueForKey:@"sync_time"];
-    
-    NSString* display = [[NSString alloc] init];
-    
-    switch(alarm)
-    {
-        case 0:
-            display = @"Sunday";
-            break;
-        case 1:
-            display = @"Monday";
-            break;
-        case 2:
-            display = @"Tuesday";
-            break;
-        case 3:
-            display = @"Wednesday";
-            break;
-        case 4:
-            display = @"Thursday";
-            break;
-        case 5:
-            display = @"Friday";
-            break;
-        case 6:
-            display = @"Saturday";
-            break;
-        case 7:
-            display = @"Never";
-            break;
-        case 8:
-            display = @"Every Day";
-            break;
-        default:
-            display = @"Never";
-    }
-    
-    if (alarm != 7)
-    {
-        display = [display stringByAppendingString:[NSString stringWithFormat:@" @ %@", time]];
-    }
-    
-    UITableViewCell* alarm_cell = [super tableView:settingsTable cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
-    
-    [alarm_cell.textLabel setText:display];
 }
 
 - (void) loadTitle
@@ -294,6 +240,13 @@
     [super viewDidLoad];
     
     [self loadSavedSettings];
+
+    // Gets Build Version from Plist then sets it to label in Settings Config
+    NSString *buildVersionNum = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleVersion"];
+    NSMutableString *buildVersion = [[NSMutableString alloc] initWithString:@"MyTLC Sync Version "];
+    [buildVersion appendString:buildVersionNum];
+    lblMyTLCSyncVersion.text = buildVersion;
+    
 }
 
 - (void)didReceiveMemoryWarning

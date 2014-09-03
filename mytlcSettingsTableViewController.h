@@ -24,6 +24,6 @@
 
 @property NSMutableDictionary* settings;
 @property (strong, nonatomic) IBOutlet UITableView *settingsTable;
-
+@property (strong, nonatomic) IBOutlet UILabel *lblMyTLCSyncVersion;
 
 @end
