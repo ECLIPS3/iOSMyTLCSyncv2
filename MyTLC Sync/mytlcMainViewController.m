@@ -224,7 +224,7 @@ BOOL showNotifications = NO;
     } else {
         
     }
-    
+
 }
 
 - (void) viewDidAppear:(BOOL)animated

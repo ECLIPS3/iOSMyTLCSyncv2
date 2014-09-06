@@ -447,15 +447,40 @@ NSString* message = nil;
 
 - (NSDate*) parseTime:(NSString*) time
 {
-    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
     
-    [dateFormatter setDateFormat:@"MM dd, yyyy hh:mm a"];
+    // Checks to see if user is on a 24 Hour clcok or 12 Hour clock system. Returns YES/TRUE if on 24 Hour clock
+    NSString *format = [NSDateFormatter dateFormatFromTemplate:@"j" options:0 locale:[NSLocale currentLocale]];
+    BOOL is24Hour = ([format rangeOfString:@"a"].location == NSNotFound);
+    // NSLog(@"%@\n",(is24Hour ? @"YES" : @"NO"));
     
-    time = [time stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    NSDate* date = [dateFormatter dateFromString:time];
-    
-    return date;
+    if (is24Hour == TRUE)
+    {
+        // Sets starting format for input Time/Date conversion string
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MM dd, yyyy hh:mm a"];
+        
+        NSDate *date = [dateFormatter dateFromString:time];
+        
+        // Sets ending format for Time/Date conversion string
+        dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"MM dd, yyyy HH:mm"];
+        
+        return date;
+        
+        // Otherwise if on 12 Hour clock system continue as normal
+    } else {
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+        
+        [dateFormatter setDateFormat:@"MM dd, yyyy hh:mm a"];
+            
+        time = [time stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            
+        NSDate* date = [dateFormatter dateFromString:time];
+            
+        return date;
+    }
+
 }
 
 
