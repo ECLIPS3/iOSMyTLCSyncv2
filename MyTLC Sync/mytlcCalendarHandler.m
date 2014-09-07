@@ -456,17 +456,31 @@ NSString* message = nil;
     
     if (is24Hour == TRUE)
     {
-        // Sets starting format for input Time/Date conversion string
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"MM dd, yyyy hh:mm a"];
+
+        // Initialized DateFormatter
+        NSDateFormatter* df = [[NSDateFormatter alloc]init];
+        // Sets Locale to en_US for proper formatting
+        [df setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
         
-        NSDate *date = [dateFormatter dateFromString:time];
+        // May be able to use setTimeZone to shorten the TimeZone conversion using just a single step here. Leaving off for future debugging and testing
+        //    [df setTimeZone:[NSTimeZone systemTimeZone]];
         
-        // Sets ending format for Time/Date conversion string
-        dateFormatter = [[NSDateFormatter alloc] init];
+        // Sets the input format which includes the 12 hour clock and AM/PM
+        [df setDateFormat:@"MM dd, yyyy hh:mm a"];
+        // Sets the output format for 24 hour clock, then converts to string
+        NSDate* date = [df dateFromString:time];
+        [df setDateFormat:@"MM dd, yyyy HH:mm"];
+        NSString *stringFromDate = [df stringFromDate:date];
+        
+    
+        // Reconverting from proper format of a String to proper format of a Date value
+        // as we return a Date value and not a String
+        NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
         [dateFormatter setDateFormat:@"MM dd, yyyy HH:mm"];
+        NSDate* date2 = [dateFormatter dateFromString:stringFromDate];
         
-        return date;
+        return date2;
+        
         
         // Otherwise if on 12 Hour clock system continue as normal
     } else {
